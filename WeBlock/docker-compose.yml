@@ -1,0 +1,29 @@
+# compose syntax version.
+version: "3.6"
+
+# services declaration.
+services:
+  # Frontend server
+  frontend:
+    container_name: weblock-frontend
+    image: ebiven/vue-cli
+    entrypoint: sh -c "cd /code; npm run dev"
+    network_mode: host
+    volumes:
+      - ./src/frontend/:/code
+    depends_on:
+      - backend
+    ports:
+      - 8080:8080
+
+  # Backend server
+  backend:
+    container_name: weblock-backend
+    build: docker-images/backend
+    image: mentz/ogrc:backend
+    entrypoint: sh -c "cd /code; npm install --quiet; npm run dev"
+    network_mode: host
+    volumes:
+      - ./src/backend/:/code
+    ports:
+      - 3000:3000
