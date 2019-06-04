@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "description": "WeBlock backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

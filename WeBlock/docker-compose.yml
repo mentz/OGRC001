@@ -10,7 +10,7 @@ services:
     entrypoint: sh -c "cd /code; npm run dev"
     network_mode: host
     volumes:
-      - ./src/frontend/:/code
+      - ./frontend/:/code
     depends_on:
       - backend
     ports:
@@ -24,6 +24,6 @@ services:
     entrypoint: sh -c "cd /code; npm install --quiet; npm run dev"
     network_mode: host
     volumes:
-      - ./src/backend/:/code
+      - ./backend/:/code
     ports:
       - 3000:3000
