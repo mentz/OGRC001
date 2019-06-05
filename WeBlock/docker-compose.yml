@@ -7,7 +7,7 @@ services:
   frontend:
     container_name: weblock-frontend
     image: ebiven/vue-cli
-    entrypoint: sh -c "cd /code; npm run dev"
+    entrypoint: sh -c "cd /code; npm install --quiet; npm run dev"
     network_mode: host
     volumes:
       - ./frontend/:/code
