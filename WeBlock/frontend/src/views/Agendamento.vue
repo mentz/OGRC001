@@ -8,7 +8,7 @@
           header-class="bg-secondary text-light"
           class="w-100"
         >
-          <b-card-text>Agendamentos....</b-card-text>
+          <b-card-text>Em desenvolvimento</b-card-text>
         </b-card>
       </b-row>
     </b-container>

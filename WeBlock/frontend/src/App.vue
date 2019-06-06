@@ -41,7 +41,7 @@
         </b-col>
       </b-row>
     </b-container>
-
+  <FlashMessage></FlashMessage>
   </div>
 </template>
 
@@ -67,7 +67,11 @@ export default {
     },
 
     mudarPagina() {
-      this.$router.push(this.pagina);
+      console.log("a");
+      if(this.pagina != 'logoff')
+        this.$router.push(this.pagina);
+      else 
+        this.logoff();
     }
   }
 }
@@ -83,7 +87,7 @@ export default {
 }
 
 /* Tirei as bordas redondas de todos os componentes para ficar flat */
-b-form-radio-group .b-card  {
+.b-form-radio-group .b-card  {
   border-radius: 0 !important;
 }
 

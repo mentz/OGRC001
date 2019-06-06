@@ -7,21 +7,19 @@
           header-tag="header"
           header-class="bg-secondary text-light"
           class="w-100"
-        >
+        > 
           <b-row align-h="center">
             <template v-for="(item, idx) in porta">
               <div class="m-1">
-                <div class="border border-secondary">
-                  #{{idx + 1}}
-                </div>
-                <div class="porta">
+                <div :class="`porta border border-` +((item.ativada)?'success':'danger')">
                   <b-button squared @click="acaoPorta(idx)" class="w-100 h-100"> 
-                    <div v-if="item.loading" class="spinner-border" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                    <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'white' }"/> 
-                    <font-awesome-icon v-else icon="ethernet" :style="{ color: 'black' }"/> 
+                    <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
+                    <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" size="lg" /> 
+                    <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" size="lg"/> 
                   </b-button>
+                </div>
+                <div class="bg-secondary">
+                  <small class="text-light ">#{{idx + 1}}</small>
                 </div>
               </div>
             </template>
@@ -44,18 +42,30 @@ export default {
 
   data() {
     return {
+      alertId: 0,
       porta: [],
     }
   },
 
   methods: {
+
     acaoPorta(idx) {
-      this.porta[idx].loading = true;
-      
-      setTimeout(() => {
-        this.porta[idx].ativada = !this.porta[idx].ativada;
-        this.porta[idx].loading = false;
-      }, 1000);
+      if(!this.porta[idx].loading) {
+        this.porta[idx].loading = true;
+        
+        setTimeout(() => {
+          let erro = false;
+          if(!erro) {
+            this.porta[idx].ativada = !this.porta[idx].ativada;
+            let msg = "Porta " + (idx + 1) + " " + ((this.porta[idx].ativada) ? "ativada" : "desativada");
+            this.flashMessage.success({ title: 'Sucesso', message: msg});
+          } else {
+            let msg = "Erro ao " + ((this.porta[idx].ativada) ? "desativar" : "ativar" ) + " porta " + (idx + 1);
+            this.flashMessage.error({ title: 'Erro', message: msg});
+          }
+          this.porta[idx].loading = false;
+        }, 1500);
+      }
 
     }
   },
@@ -73,7 +83,7 @@ export default {
 
 <style>
 .porta {
-  width: 60px;
-  height: 50px;
+  width: 65px;
+  height: 55px;
 }
 </style>
