@@ -1,9 +1,9 @@
 <template>
-  <div class="home">
+  <div class="port-config">
     <b-container class="fluid">
       <b-row align-h="justify">
         <b-card
-          header="Home"
+          header="Configuração usuário"
           header-tag="header"
           header-class="bg-secondary text-light"
           class="w-100"
@@ -20,7 +20,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: "home",
+  name: "perfil",
   components: {
     // HelloWorld
   }

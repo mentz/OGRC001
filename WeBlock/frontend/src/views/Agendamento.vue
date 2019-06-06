@@ -1,14 +1,14 @@
 <template>
-  <div class="home">
+  <div class="agendamento">
     <b-container class="fluid">
       <b-row align-h="justify">
         <b-card
-          header="Home"
+          header="Agendamento"
           header-tag="header"
           header-class="bg-secondary text-light"
           class="w-100"
         >
-          <b-card-text>Em desenvolvimento</b-card-text>
+          <b-card-text>Agendamentos....</b-card-text>
         </b-card>
       </b-row>
     </b-container>
@@ -20,7 +20,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: "home",
+  name: "agendamento",
   components: {
     // HelloWorld
   }

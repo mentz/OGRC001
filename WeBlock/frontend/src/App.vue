@@ -1,40 +1,73 @@
 <template>
   <div id="app">
-    <div id="nav" v-if="!login">
-      <b-row align-h="between" align-v="center">
+    <head>
+      <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet">
+    </head>
+
+    <b-navbar type="dark" variant="secondary">
+      <b-navbar-nav class="ml-auto mr-auto">
+        <b-nav-item> <span class="text-light"> fioreseNET v0.01 </span></b-nav-item>
+      </b-navbar-nav>
+    </b-navbar>
+    
+    <b-container id="body" fluid>
+      <b-row justify-content-md-center>
         <b-col>
-          <span>
-            <h3><b>WeBlock</b></h3>
-            <p style="margin: -10px 0 4px 0;">Bloqueio de navegação</p>
-          </span>
-        </b-col>
-        <b-col>
-          <router-link to="/">Home</router-link> |
-          <router-link to="/agendamentos">Agendamentos</router-link>
-        </b-col>
-        <b-col>
-          <b-button @click="logoff">
-            Sair
-          </b-button>
+
+          <b-card no-body class="overflow-hidden ml-auto mr-auto mt-sm-2 mt-lg-5" style="max-width: 900px;">
+            <b-row no-gutters class="h-100">
+              <b-col md="4" lg="3" class="bg-secondary">
+                  <b-form-radio-group
+                    id="btn-radios-3"
+                    v-model="pagina"
+                    :options="options"
+                    buttons
+                    stacked
+                    name="radio-btn-stacked"
+                    class="w-100"
+                    @input="mudarPagina()"
+                  ></b-form-radio-group>
+              </b-col>
+              <b-col md="8" lg="9">
+                <b-card-body>
+                  <b-card-text>
+                    <router-view/>
+                  </b-card-text>
+                </b-card-body>
+              </b-col>
+            </b-row>
+          </b-card>
+
         </b-col>
       </b-row>
-    </div>
-    <b-container id="body" fluid>
-      <router-view/>
     </b-container>
-    <footer>
-      <div id="footer">
-        <b>WeBlock</b> © 2019
-      </div>
-    </footer>
+
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      pagina: 'home',
+      login: false,
+      options: [
+        { text: 'Home', value: 'home'},
+        { text: 'Configuração Portas', value: 'port-config' },
+        { text: 'Agendamento', value: 'agendamento' },
+        { text: 'Perfil', value: 'perfil' },
+        { text: 'Sair', value: 'logoff'}
+      ]
+    }
+  },
+
   methods: {
     logoff() {
       alert("Desconectado :D\nTroque isso por uma função.");
+    },
+
+    mudarPagina() {
+      this.$router.push(this.pagina);
     }
   }
 }
@@ -49,30 +82,9 @@ export default {
   color: #2c3e50;
 }
 
-#body {
-  background-color: #ffffff;
-  padding: 2em;
-  /* box-shadow: 0 0 23px #cccccc; */
-  border-style: solid;
-  border-color: #2c3e50;
-  border-width: 1px 0 1px 0;
+/* Tirei as bordas redondas de todos os componentes para ficar flat */
+b-form-radio-group .b-card  {
+  border-radius: 0 !important;
 }
 
-#nav {
-  padding: 1.2em;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
-#footer {
-  margin: 2em;
-  /* padding: 1em; */
-}
 </style>
