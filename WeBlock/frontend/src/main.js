@@ -6,13 +6,20 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faEthernet } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faEthernet, faNetworkWired, faClock} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import FlashMessage from '@smartweb/vue-flash-message';
-Vue.use(FlashMessage);
+import $ from 'jquery';
+import flatPickr from 'vue-flatpickr-component';
+import '../node_modules/flatpickr/dist/flatpickr.css';
 
-library.add(faUserSecret, faEthernet);
+
+Vue.use(FlashMessage, $);
+
+library.add(faUserSecret, faEthernet, faNetworkWired, faClock);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('flat-pickr', flatPickr);
+
 
 
 Vue.config.productionTip = false;

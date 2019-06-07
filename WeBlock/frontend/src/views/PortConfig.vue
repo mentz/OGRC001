@@ -14,12 +14,15 @@
                 <div :class="`porta border border-` +((item.ativada)?'success':'danger')">
                   <b-button squared @click="acaoPorta(idx)" class="w-100 h-100"> 
                     <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
-                    <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" size="lg" /> 
-                    <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" size="lg"/> 
+                    <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
+                    <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
                   </b-button>
                 </div>
                 <div class="bg-secondary">
-                  <small class="text-light ">#{{idx + 1}}</small>
+
+                  <small class="text-light ">
+                    {{idx + 1}}
+                  </small>
                 </div>
               </div>
             </template>
@@ -64,7 +67,7 @@ export default {
             this.flashMessage.error({ title: 'Erro', message: msg});
           }
           this.porta[idx].loading = false;
-        }, 1500);
+        }, 500);
       }
 
     }
