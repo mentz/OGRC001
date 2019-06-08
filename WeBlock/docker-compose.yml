@@ -6,7 +6,8 @@ services:
   # Frontend server
   frontend:
     container_name: weblock-frontend
-    image: ebiven/vue-cli
+    build: docker-images/frontend
+    image: mentz/ogrc:frontend
     entrypoint: sh -c "cd /code; npm install --quiet; npm run dev"
     network_mode: host
     volumes:
