@@ -8,14 +8,23 @@
     "dev": "vue-cli-service serve"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
+    "@smartweb/vue-flash-message": "^0.4.1",
     "bootstrap-vue": "^2.0.0-rc.19",
     "core-js": "^2.6.5",
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0",
     "vue": "^2.6.10",
+    "vue-bootstrap-datetimepicker": "^5.0.1",
+    "vue-flatpickr-component": "^8.1.2",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
