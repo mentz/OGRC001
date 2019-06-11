@@ -1,0 +1,13 @@
+{
+  "switches": [
+    {
+      "teste": {
+        "ip": "10.90.90.90",
+        "community": "private",
+        "management_port": "1",
+        "uplink_port": "2",
+        "port_quantity": "24"
+      }
+    }
+  ]
+}

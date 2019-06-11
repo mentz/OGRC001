@@ -1,37 +1,23 @@
-const snmp = require('./src/controller/snmp');
+const restify = require('restify');
+const rjwt = require('restify-jwt-community');
+const corsMiddleware = require('restify-cors-middleware');
+// const mongoose = require('mongoose');
+const config = require('./config');
 
-console.log('Estou vivo!');
+const server = restify.createServer();
 
-snmp.createSession('10.90.90.90', 'private');
-// snmp.setPortStatus(16, 2, (err, result) => {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     console.log(result);
+// ----- Middleware -----
+// Habilitar CORS
+const cors = corsMiddleware({origins: ['*'], allowHeaders: ['Authorization']});
+server.pre(cors.preflight);
+server.pre(cors.actual);
 
-snmp.getPortStatus(16, (err, result) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log(result);
-    snmp.closeSession();
+// bodyParser
+server.use(restify.plugins.bodyParser());
 
-    snmp.setPortStatus(16, 1, (err, result) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(result);
+// Proteção de rotas
+server.use(rjwt({secret: config.JWT_SECRET}).unless({path: ['/login']}));
 
-        snmp.getPortStatus(16, (err, result) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log(result);
-          }
-        });
-      }
-    });
-  }
-});
-//   }
-// });
+server.listen(config.PORT);
+require('./src/routes/all')(server);
+console.log(`Server started on port ${config.PORT}`);
