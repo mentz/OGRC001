@@ -1,7 +1,7 @@
 <template>
   <div class="port-config">
     <b-container class="fluid">
-      <b-row align-h="justify">
+      <b-row align-h="center">
         <b-card
           header="Configuração Portas"
           header-tag="header"
@@ -10,15 +10,17 @@
         > 
           <b-row align-h="center">
             <template v-for="(item, idx) in switches">
-              <b-card
+              <b-card class="w-100"
                 :header="`Switch: ` + (item.name)"
                 :key="idx">
+                <b-row align-h="center">
                 <template v-for="(porta, idy) in item.ports">
                   <div class="m-1" :key="idy">
                     <div :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')">
-                      <b-button squared @click="acaoPorta(idy)" class="w-100 h-100"> 
+                      <b-button squared @click="acaoPorta(idx, idy)" class="w-100 h-100" :disabled="porta.disabled">
                         <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
-                        <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
+                        <font-awesome-icon v-else-if="porta.adminStatus == 2" icon="ethernet" :style="{ color: 'Secondary ' }" style="font-size: 2rem" />
+                        <font-awesome-icon v-else-if="porta.operStatus == 1" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
                         <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
                       </b-button>
                     </div>
@@ -30,6 +32,7 @@
                     </div>
                   </div>
                 </template>
+                </b-row>
               </b-card>
             </template>
           </b-row>
@@ -58,51 +61,55 @@ export default {
   },
 
   methods: {
-
-    acaoPorta(idx) {
-      if(!this.porta[idx].loading) {
-        this.porta[idx].loading = true;
+    acaoPorta(sw, port) {
+      if(!this.switches[sw].ports[port].loading) {
+        this.switches[sw].ports[port].loading = true;
         
-        setTimeout(() => {
-          let erro = false;
-          if(!erro) {
-            this.porta[idx].ativada = !this.porta[idx].ativada;
-            let msg = "Porta " + (idx + 1) + " " + ((this.porta[idx].ativada) ? "ativada" : "desativada");
-            this.flashMessage.success({ title: 'Sucesso', message: msg});
-          } else {
-            let msg = "Erro ao " + ((this.porta[idx].ativada) ? "desativar" : "ativar" ) + " porta " + (idx + 1);
-            this.flashMessage.error({ title: 'Erro', message: msg});
-          }
-          this.porta[idx].loading = false;
-        }, 500);
+        let body = {openTime: "", closeTime: "", sw_ports: [String(port)]};
+        Client.post(`/switch/${this.switches[sw].name}`, body).then((response) => {
+          this.switches[sw].ports[port].loading = false;
+          // this.switches[sw].ports[port].adminStatus = response.body;
+          let msg = "Porta " + (port + 1) + " " + ((this.switches[sw].ports[port].adminStatus) ? "ativada" : "desativada");
+          this.flashMessage.success({ title: 'Sucesso', message: msg});
+        }).catch((err) => {
+          console.error(err);
+          this.switches[sw].ports[port].loading = false;
+          let msg = "Erro ao " + ((this.switches[sw].ports[port].adminStatus) ? "desativar" : "ativar" ) + " porta " + (port + 1);
+          this.flashMessage.error({ title: 'Erro', message: msg});
+        });
       }
+    },
 
+    updateSala() {
+      this.switches = [];
+      Client.get(`/sala/${config.SALA}`).then((resultado) => {
+        let switches = resultado.data;
+        for (let sw of switches) {
+          let portas = [];
+          Client.get(`/switch/${sw.name}`).then((res2) => {
+            let status = res2.data;
+            for (let porta of status) {
+              // console.log(porta);
+              portas.push({
+                number: porta.portNumber,
+                disabled: sw.dont_block.includes(String(porta.portNumber)),
+                adminStatus: porta.adminStatus,
+                operStatus: porta.operStatus,
+                loading: false
+              });
+            }
+            this.switches.push({
+              name: sw.name,
+              ports: portas
+            });
+          });
+        }
+      });
     }
   },
 
   created() {
-    Client.get(`/sala/${config.SALA}`).then((resultado) => {
-      let switches = resultado.data;
-      for (let sw of switches) {
-        let portas = [];
-        Client.get(`/switch/${sw.name}`).then((res2) => {
-          let status = res2.data;
-          for (let porta of status) {
-            console.log(porta);
-            portas.push({
-              number: porta.portNumber,
-              disabled: sw.dont_block.includes(String(porta.portNumber)),
-              adminStatus: porta.adminStatus,
-              operStatus: porta.operStatus
-            });
-          }
-          this.switches.push({
-            name: sw.name,
-            ports: portas
-          });
-        });
-      }
-    });
+    this.updateSala();
   }
 };
 </script>
