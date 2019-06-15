@@ -125,6 +125,14 @@ export default {
       return  this.picker0.date.split(' ')[0]
     },
 
+    date0: function() {
+      return document.querySelector("#pickr0")._flatpickr.selectedDates[0];
+    },
+
+    date1: function() {
+      return document.querySelector("#pickr1")._flatpickr.selectedDates[0];
+    },
+
     picker1Config: function() {
       return {
         minDate: this.dpicker0,
@@ -144,21 +152,42 @@ export default {
     agendar() {
       this.loading = true;
 
-      setTimeout(() => {
-          let erro = false;
-          if(!erro) {
-            this.flashMessage.success({ title: 'Sucesso', message: 'Agendado com sucesso!'});
-          } else {
-            this.flashMessage.error({ title: 'Erro', message: 'Erro ao agendar'});
-          }
-          this.loading = false;
-        }, 1000);
+      this.switches.forEach(x => {
+        let sw_ports = [];
+
+        x.ports.forEach(xx => {
+          if(xx.marcado)
+            sw_ports.push(xx.number);
+        })
+
+        if(sw_ports.length > 0) {
+          let body = {
+            openTime: this.date1,
+            closeTime: this.date0,
+            sw_ports: sw_ports
+          };
+
+          console.log(body);
+
+          
+
+          Client.post(`/switch/${x.name}`, body)
+            .then((resultado) => {
+              this.flashMessage.success({ title: 'Sucesso', message: 'Agendado com sucesso!'});
+            })
+            .catch((erro) => {
+              this.flashMessage.error({ title: 'Erro', message: 'Erro ao agendar'});
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        } else this.loading = false;
+      });
     }
   },
 
 
   created() {
-    
     Client.get(`/sala/${config.SALA}`).then((resultado) => {
       let switches = resultado.data;
       for (let sw of switches) {
@@ -179,12 +208,6 @@ export default {
         });
       }
     });
-  
-    for(let i = 0; i < 24; i++) {
-      this.porta.push({
-        ativada: true,
-      })
-    }
   }
 };
 </script>
