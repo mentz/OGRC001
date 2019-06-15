@@ -11,9 +11,10 @@
           <b-row align-h="center">
             <template v-for="(item, idx) in switches">
               <b-card
-                :header="`Switch: ` + (item.name)" >
+                :header="`Switch: ` + (item.name)"
+                :key="idx">
                 <template v-for="(porta, idy) in item.ports">
-                  <div class="m-1">
+                  <div class="m-1" :key="idy">
                     <div :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')">
                       <b-button squared @click="acaoPorta(idy)" class="w-100 h-100"> 
                         <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
