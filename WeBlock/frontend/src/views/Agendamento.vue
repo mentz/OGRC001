@@ -1,7 +1,7 @@
 <template>
   <div class="agendamento">
     <b-container class="fluid">
-      <b-row align-h="justify">
+      <b-row align-h="center">
         <b-card
           header="Novo agendamento"
           header-tag="header"
@@ -9,12 +9,13 @@
           class="w-100"
         > 
           <b-card-text>
-            <b-row align-h="justify">
+            <b-row align-h="center">
               <b-col sm="12" md="6">
                 <div class="bg-secondary rounded-top">
                   <span class="text-light" >Horário fechamento</span>
                 </div>
                 <flat-pickr 
+                  id="pickr0"
                   class="text-center w-100" 
                   v-model="picker0.date" 
                   :config="{
@@ -32,6 +33,7 @@
                   <span class="text-light" >Horário abertura</span>
                 </div>
                 <flat-pickr 
+                  id="pickr1"
                   class="text-center w-100" 
                   v-model="picker1.date" 
                   :config="{
@@ -44,22 +46,27 @@
                 </flat-pickr>
               </b-col>
 
-              <b-col sm="12" class="mt-2">
+              <b-col sm="12" class="mt-2" v-for="(item, idx) in switches">
                 <div class="bg-secondary rounded-top">
-                  <span class="text-light" >Configuração</span>
+                  <span class="text-light" >Switch: {{item.name}}</span>
                 </div>
                 <div class="border border-secondary p-1">
                   <div class="mt-1">
-                    <template v-for="(item, idx) in porta">
-                      <b-button squared :class="`border-0 bg-` + ((item.ativada)?'secondary':'success')" @click="acaoPorta(idx, 0)" style="width: 45px; height: 40px;"> 
-                        <small> {{idx + 1}} </small>
+                    <template v-for="(porta, idy) in item.ports">
+                      <b-button 
+                        squared 
+                        :class="`border-0 bg-` + ((porta.marcado)?'success':'secondary')" 
+                        @click="acaoPorta(porta)" 
+                        style="width: 45px; height: 40px;"
+                        :disabled="porta.disabled"> 
+                        <small> {{idy + 1}} </small>
                       </b-button>
                     </template>
                   </div>
-
                 </div>
               </b-col>
 
+          
             </b-row>
 
             <b-row class="mt-2">
@@ -82,6 +89,8 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
+import {Client} from "@/api/rest-client";
+import * as config from "@/config";
 
 export default {
   name: "agendamento",
@@ -99,7 +108,9 @@ export default {
 
       picker1: {
         date: "",
-      }
+      },
+
+      switches: [],
     }
   },
 
@@ -125,12 +136,8 @@ export default {
   },
 
   methods: {
-    acaoPorta(idx, p) {
-      switch(p) {
-        case 0:
-          this.porta[idx].ativada = !this.porta[idx].ativada;
-          break;
-      }
+    acaoPorta(porta) {
+      porta.marcado = !porta.marcado;
     },
 
 
@@ -151,6 +158,28 @@ export default {
 
 
   created() {
+    
+    Client.get(`/sala/${config.SALA}`).then((resultado) => {
+      let switches = resultado.data;
+      for (let sw of switches) {
+        let portas = [];
+        Client.get(`/switch/${sw.name}`).then((res2) => {
+          let status = res2.data;
+          for (let porta of status) {
+            portas.push({
+              number: porta.portNumber,
+              disabled: sw.dont_block.includes(String(porta.portNumber)),
+              marcado: false,
+            });
+          }
+          this.switches.push({
+            name: sw.name,
+            ports: portas
+          });
+        });
+      }
+    });
+  
     for(let i = 0; i < 24; i++) {
       this.porta.push({
         ativada: true,
