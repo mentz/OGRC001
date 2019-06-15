@@ -4,5 +4,11 @@
     "switches": [
       "teste"
     ]
+  },
+  {
+    "sala": "teste",
+    "switches": [
+      "leo"
+    ]
   }
 ]

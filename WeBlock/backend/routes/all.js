@@ -5,20 +5,20 @@ const cSalas = require('../controllers/salas');
 
 module.exports = (server) => {
   // POST /login
-  server.post('/login', (req, res, next) => {
-    let {username, password, sala} = req.body;
+  // server.post('/login', (req, res, next) => {
+  //   let {username, password, sala} = req.body;
 
-    let token = cUsers.login(username, password);
-    if (token == null) {
-      res.status(403);
-      res.send('Credenciais incorretas');
-    } else {
-      res.status(200);
-      res.send(token);
-    }
+  //   let token = cUsers.login(username, password);
+  //   if (token == null) {
+  //     res.status(403);
+  //     res.send('Credenciais incorretas');
+  //   } else {
+  //     res.status(200);
+  //     res.send(token);
+  //   }
 
-    next();
-  });
+  //   next();
+  // });
 
   // GET /sala
   // Obtem lista de salas
@@ -29,10 +29,10 @@ module.exports = (server) => {
     next();
   });
 
-  // GET /sala/:sid
+  // GET /sala/:sala
   // Obtem lista das portas para aquela sala
-  server.get('/sala/:sid', (req, res, next) => {
-    let sala = req.params.sid;
+  server.get('/sala/:sala', (req, res, next) => {
+    let sala = req.params.sala;
 
     res.status(200);
     res.send(cSalas.getSwitchesDaSala(sala));
@@ -59,9 +59,9 @@ module.exports = (server) => {
 
   // GET /agenda
   // Obtém agendamentos futuros
-  server.get('/agenda/:sw_name', async (req, res, next) => {
-    let {sw_name} = req.params;
-    let result = await cSwitch.getAgendamentos(sw_name);
+  server.get('/agenda/:sala', async (req, res, next) => {
+    let {sala} = req.params;
+    let result = await cSwitch.getAgendamentos(sala);
 
     res.status(200);
     res.send(result);
@@ -98,19 +98,26 @@ module.exports = (server) => {
         res.send("Não é possível acionar imediatamente mais de uma porta");
       }
     } else {
-      // Agendar fechamento
-      let res_fechamento = await cSwitch.setAgendamentoFechar(sw_name, sw_ports, closeTime);
-      if (res_fechamento == null) {
-        res.status(400);
-        res.send("Fechamento precede horário atual");
+      if (closeTime) {
+        // Agendar fechamento
+        let res_fechamento = await cSwitch.setAgendamentoFechar(sw_name, sw_ports, closeTime);
+        if (res_fechamento == null) {
+          res.status(400);
+          res.send("Fechamento precede horário atual");
+        }
       }
 
-      // Agendar abertura
-      let res_abertura = await cSwitch.setAgendamentoAbrir(sw_name, sw_ports, openTime);
-      if (res_abertura == null) {
-        res.status(400);
-        res.send("Abertura precede horário atual");
+      if (openTime) {
+        // Agendar abertura
+        let res_abertura = await cSwitch.setAgendamentoAbrir(sw_name, sw_ports, openTime);
+        if (res_abertura == null) {
+          res.status(400);
+          res.send("Abertura precede horário atual");
+        }
       }
+
+      res.status(200);
+      res.send("Agendamentos realizados");
     }
 
     next();

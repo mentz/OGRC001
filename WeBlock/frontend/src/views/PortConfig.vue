@@ -9,22 +9,27 @@
           class="w-100"
         > 
           <b-row align-h="center">
-            <template v-for="(item, idx) in porta">
-              <div class="m-1">
-                <div :class="`porta border border-` +((item.ativada)?'success':'danger')">
-                  <b-button squared @click="acaoPorta(idx)" class="w-100 h-100"> 
-                    <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
-                    <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
-                    <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
-                  </b-button>
-                </div>
-                <div class="bg-secondary">
+            <template v-for="(item, idx) in switches">
+              <b-card
+                :header="`Switch: ` + (item.name)" >
+                <template v-for="(porta, idy) in item.ports">
+                  <div class="m-1">
+                    <div :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')">
+                      <b-button squared @click="acaoPorta(idy)" class="w-100 h-100"> 
+                        <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
+                        <font-awesome-icon v-else-if="item.ativada" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
+                        <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
+                      </b-button>
+                    </div>
+                    <div class="bg-secondary">
 
-                  <small class="text-light ">
-                    {{idx + 1}}
-                  </small>
-                </div>
-              </div>
+                      <small class="text-light ">
+                        {{idy + 1}}
+                      </small>
+                    </div>
+                  </div>
+                </template>
+              </b-card>
             </template>
           </b-row>
         </b-card>
@@ -35,7 +40,8 @@
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
+import {Client} from "@/api/rest-client";
+import * as config from "@/config";
 
 export default {
   name: "port-config",
@@ -46,7 +52,7 @@ export default {
   data() {
     return {
       alertId: 0,
-      porta: [],
+      switches: [],
     }
   },
 
@@ -74,12 +80,28 @@ export default {
   },
 
   created() {
-    for(let i = 0; i < 24; i++) {
-      this.porta.push({
-        ativada: true,
-        loading: false,
-      })
-    }
+    Client.get(`/sala/${config.SALA}`).then((resultado) => {
+      let switches = resultado.data;
+      for (let sw of switches) {
+        let portas = [];
+        Client.get(`/switch/${sw.name}`).then((res2) => {
+          let status = res2.data;
+          for (let porta of status) {
+            console.log(porta);
+            portas.push({
+              number: porta.portNumber,
+              disabled: sw.dont_block.includes(String(porta.portNumber)),
+              adminStatus: porta.adminStatus,
+              operStatus: porta.operStatus
+            });
+          }
+          this.switches.push({
+            name: sw.name,
+            ports: portas
+          });
+        });
+      }
+    });
   }
 };
 </script>
