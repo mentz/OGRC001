@@ -85,11 +85,17 @@ module.exports = (server) => {
         } else {
           result = await cSwitch.setPortaDoSwitch(sw_name, sw_port, 1);
         }
-        res.status(200);
-        res.send("Solicitação executada com sucesso");
+
+        if (result == null) {
+          res.status(500);
+          res.send("Algo de errado aconteceu");
+        } else {
+          res.status(200);
+          res.send("Solicitação executada com sucesso");
+        }
       } else {
         res.status(400);
-        res.send("Can't execute individual operation with more than one port");
+        res.send("Não é possível acionar imediatamente mais de uma porta");
       }
     } else {
       // Agendar fechamento

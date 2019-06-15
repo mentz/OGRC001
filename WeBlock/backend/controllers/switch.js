@@ -47,7 +47,7 @@ async function getPortasDoSwitch(sw_name) {
   let portas = [];
   for (let i = 0; i < sw.port_quantity; i++) {
     let sw_portstatus = await snmp.getPortStatus(sw, i);
-    // console.log(sw_portstatus);
+    
     portas.push({
       portNumber: i + 1,
       adminStatus: sw_portstatus[0].value,
@@ -56,6 +56,19 @@ async function getPortasDoSwitch(sw_name) {
   }
 
   return portas;
+}
+
+async function setPortaDoSwitch(sw_name, sw_port, status) {
+  let sw = null;
+  for (let s of switches) {
+    if (s.name == sw_name) {
+      sw = s;
+    }
+  }
+  if (sw == null) return null;
+
+  let sw_portstatus = await snmp.setPortStatus(sw, sw_port, status);
+  return sw_portstatus;
 }
 
 module.exports = {getSwitch, getPortasDoSwitch, setPortaDoSwitch}
