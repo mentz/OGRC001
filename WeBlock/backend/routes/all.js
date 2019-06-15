@@ -98,22 +98,27 @@ module.exports = (server) => {
         res.send("Não é possível acionar imediatamente mais de uma porta");
       }
     } else {
+      console.log(sw_ports);
       if (closeTime) {
+        console.log("Veio closeTime:");
+        console.log(closeTime);
         // Agendar fechamento
         let res_fechamento = await cSwitch.setAgendamentoFechar(sw_name, sw_ports, closeTime);
-        if (res_fechamento == null) {
-          res.status(400);
-          res.send("Fechamento precede horário atual");
-        }
+        // if (res_fechamento == null) {
+        //   res.status(400);
+        //   res.send("Fechamento precede horário atual");
+        // }
       }
 
       if (openTime) {
+        console.log("Veio openTime:");
+        console.log(openTime);
         // Agendar abertura
         let res_abertura = await cSwitch.setAgendamentoAbrir(sw_name, sw_ports, openTime);
-        if (res_abertura == null) {
-          res.status(400);
-          res.send("Abertura precede horário atual");
-        }
+        // if (res_abertura == null) {
+        //   res.status(400);
+        //   res.send("Abertura precede horário atual");
+        // }
       }
 
       res.status(200);

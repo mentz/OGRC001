@@ -19,7 +19,7 @@
                     <div :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')">
                       <b-button squared @click="acaoPorta(idx, idy)" class="w-100 h-100" :disabled="porta.disabled">
                         <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
-                        <font-awesome-icon v-else-if="porta.adminStatus == 2" icon="ethernet" :style="{ color: 'Secondary ' }" style="font-size: 2rem" />
+                        <font-awesome-icon v-else-if="porta.adminStatus == 2" icon="ethernet" :style="{ color: 'DarkGrey ' }" style="font-size: 2rem" />
                         <font-awesome-icon v-else-if="porta.operStatus == 1" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
                         <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
                       </b-button>

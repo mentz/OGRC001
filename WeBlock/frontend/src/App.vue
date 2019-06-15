@@ -56,9 +56,9 @@ export default {
       pagina: "home",
       login: false,
       options: [
-        { text: "Início", value: "home" },
-        { text: "Configuração Portas", value: "port-config" },
-        { text: 'Agendamento', value: 'agendamento' },
+        { text: "Início", value: "/" },
+        { text: "Configuração Portas", value: "/port-config" },
+        { text: 'Agendamento', value: '/agendamento' },
         // { text: "Perfil", value: "perfil" },
         { text: "Sair", value: "logoff" }
       ]
@@ -68,7 +68,7 @@ export default {
   methods: {
     logoff() {
       window.document.close();
-      alert("Desconectado :D\nTroque isso por uma função.");
+      alert("Sinta-se desconectado :D\nisso faz mais sentido se tivesse login.");
     },
 
     mudarPagina() {
