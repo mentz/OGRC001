@@ -1,5 +1,5 @@
-var config = require('../../config');
-var users = require('../../config/users');
+var config = require('../config');
+var users = require('../config/users');
 
 async function login(username, password, sala) {
   let ret_token = null;

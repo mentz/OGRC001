@@ -1,4 +1,4 @@
-var config_comp = require('../../config/computadores');
+var config_comp = require('../config/computadores');
 
 function getSala(ip_computador){
     for(var i = 0; i < config_comp.length; i++){

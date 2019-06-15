@@ -1,26 +1,26 @@
-import store from '../store';
+import store from "../store";
 
-import {Client} from './rest-client';
+import { Client } from "./rest-client";
 
-const login = (username, password, callback) => {
-  let body = {login: username, senha: password};
+const login = (username, password, sala, callback) => {
+  let body = { login: username, senha: password, sala: sala };
 
-  Client.post('/login', body)
-      .then((value) => {
-        // eslint-disable-next-line
+  Client.post("/login", body)
+    .then(value => {
+      // eslint-disable-next-line
         // console.log(value);
-        value;
-        callback(null, true);
-      })
-      .catch((err) => {
-        // eslint-disable-next-line
+      value;
+      callback(null, true);
+    })
+    .catch(err => {
+      // eslint-disable-next-line
         // console.error(err);
-        if (err.response.status === 401) {
-          callback(null, false);
-        } else {
-          callback(err);
-        }
-      });
+      if (err.response.status === 401) {
+        callback(null, false);
+      } else {
+        callback(err);
+      }
+    });
 };
 
 const getLogado = () => {
@@ -34,4 +34,4 @@ const getUsuario = () => {
   }
 };
 
-export {login, getLogado, getUsuario, logout};
+export { login, getLogado, getUsuario };

@@ -17,9 +17,9 @@ server.use(restify.plugins.bodyParser());
 
 // Proteção de rotas
 server.use(rjwt({secret: config.JWT_SECRET}).unless({
-  path: ['/login', '/sala', '/sala/*']
+  path: ['/login', '/sala']
 }));
 
 server.listen(config.PORT);
-require('./src/routes/all')(server);
+require('./routes/all')(server);
 console.log(`Server started on port ${config.PORT}`);
