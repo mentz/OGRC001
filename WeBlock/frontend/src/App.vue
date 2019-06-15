@@ -4,15 +4,15 @@
     <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet">
   </head>
 
-  <b-navbar type="dark" variant="secondary">
-    <b-navbar-nav class="ml-auto mr-auto">
-      <b-nav-item>
+  <b-navbar type="dark" variant="secondary" class="d-none d-md-block">
+    <b-navbar-nav>
+      <b-nav-item class="w-100">
         <span class="text-light">fioreseNET v0.01</span>
       </b-nav-item>
     </b-navbar-nav>
   </b-navbar>
 
-  <b-container id="body" fluid>
+  <b-container id="body" fluid class="mt-xs-2 mt-md-0">
     <b-row justify-content-md-center>
       <b-col>
         <b-card
@@ -56,9 +56,9 @@ export default {
       pagina: "home",
       login: false,
       options: [
-        { text: "Home", value: "home" },
+        { text: "Início", value: "home" },
         { text: "Configuração Portas", value: "port-config" },
-        // { text: 'Agendamento', value: 'agendamento' },
+        { text: 'Agendamento', value: 'agendamento' },
         // { text: "Perfil", value: "perfil" },
         { text: "Sair", value: "logoff" }
       ]
@@ -67,14 +67,14 @@ export default {
 
   methods: {
     logoff() {
+      window.document.close();
       alert("Desconectado :D\nTroque isso por uma função.");
     },
 
     mudarPagina() {
-      console.log("a");
       if (this.pagina != "logoff") this.$router.push(this.pagina);
       else this.logoff();
-    }
+    },
   }
 };
 </script>
