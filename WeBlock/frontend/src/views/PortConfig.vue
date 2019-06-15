@@ -64,13 +64,14 @@ export default {
     acaoPorta(sw, port) {
       if(!this.switches[sw].ports[port].loading) {
         this.switches[sw].ports[port].loading = true;
+        let whatdo = this.switches[sw].ports[port].adminStatus == 1;
         
-        let body = {openTime: "", closeTime: "", sw_ports: [String(port)]};
+        let body = {openTime: (whatdo ? '':'now'), closeTime: (whatdo ? 'now':''), sw_ports: [String(port)]};
         Client.post(`/switch/${this.switches[sw].name}`, body).then((response) => {
           this.switches[sw].ports[port].loading = false;
-          // this.switches[sw].ports[port].adminStatus = response.body;
-          let msg = "Porta " + (port + 1) + " " + ((this.switches[sw].ports[port].adminStatus) ? "ativada" : "desativada");
+          let msg = "Porta " + (port + 1) + " " + ((this.switches[sw].ports[port].adminStatus == 1) ? "desativada" : "ativada");
           this.flashMessage.success({ title: 'Sucesso', message: msg});
+          this.updateSala();
         }).catch((err) => {
           console.error(err);
           this.switches[sw].ports[port].loading = false;

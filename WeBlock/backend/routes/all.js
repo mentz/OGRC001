@@ -91,7 +91,7 @@ module.exports = (server) => {
           res.send("Algo de errado aconteceu");
         } else {
           res.status(200);
-          res.send("Solicitação executada com sucesso");
+          res.send(result);
         }
       } else {
         res.status(400);
