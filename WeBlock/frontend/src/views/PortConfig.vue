@@ -10,33 +10,47 @@
         > 
           <b-row align-h="center">
             <template v-for="(item, idx) in switches">
-              <div class="bg-secondary rounded-top w-100">
-                <span class="text-light" >Switch: {{item.name}}</span>
-              </div>
-              <div class="border border-secondary p-1">
-                <div class="mt-1">
-                  <b-row align-h="center">
-                    <template v-for="(porta, idy) in item.ports">
-                      <div class="m-1" :key="idy">
-                        <div :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')">
-                          <b-button squared @click="acaoPorta(idx, idy)" class="w-100 h-100" :disabled="porta.disabled">
-                            <b-spinner v-if="item.loading"  type="grow" label="Spinning"></b-spinner>
-                            <font-awesome-icon v-else-if="porta.adminStatus == 2" icon="ethernet" :style="{ color: 'Secondary ' }" style="font-size: 2rem" />
-                            <font-awesome-icon v-else-if="porta.operStatus == 1" icon="ethernet" :style="{ color: 'MediumSeaGreen ' }" style="font-size: 2rem" />
-                            <font-awesome-icon v-else icon="ethernet" :style="{ color: 'Salmon ' }" style="font-size: 2rem"/> 
-                          </b-button>
-                        </div>
-                        <div class="bg-secondary">
-
-                          <small class="text-light ">
-                            {{idy + 1}}
-                          </small>
-                        </div>
+              <b-card class="w-100" :header="`Switch: ` + (item.name)" :key="idx">
+                <b-row align-h="center">
+                  <template v-for="(porta, idy) in item.ports">
+                    <div class="m-1" :key="idy">
+                      <div
+                        :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')"
+                      >
+                        <b-button
+                          squared
+                          @click="acaoPorta(idx, idy)"
+                          class="w-100 h-100"
+                          :disabled="porta.disabled"
+                        >
+                          <b-spinner v-if="item.loading" type="grow" label="Spinning"></b-spinner>
+                          <font-awesome-icon
+                            v-else-if="porta.adminStatus == 2"
+                            icon="ethernet"
+                            :style="{ color: 'DarkGrey ' }"
+                            style="font-size: 2rem"
+                          />
+                          <font-awesome-icon
+                            v-else-if="porta.operStatus == 1"
+                            icon="ethernet"
+                            :style="{ color: 'MediumSeaGreen ' }"
+                            style="font-size: 2rem"
+                          />
+                          <font-awesome-icon
+                            v-else
+                            icon="ethernet"
+                            :style="{ color: 'Salmon ' }"
+                            style="font-size: 2rem"
+                          />
+                        </b-button>
                       </div>
-                    </template>
-                  </b-row>
-                </div>
-              </div>
+                      <div class="bg-secondary">
+                        <small class="text-light">{{idy + 1}}</small>
+                      </div>
+                    </div>
+                  </template>
+                </b-row>
+              </b-card>
             </template>
           </b-row>
 

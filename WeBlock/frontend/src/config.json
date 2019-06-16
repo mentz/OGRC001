@@ -1,4 +1,4 @@
 {
-	"BACKEND_URL": "http://192.168.254.100:3000/",
-	"SALA": "teste"
+  "BACKEND_URL": "http://localhost:3000/",
+  "SALA": "f301"
 }

@@ -48,7 +48,7 @@ module.exports = (server) => {
     let result = await cSwitch.getPortasDoSwitch(sw_name);
     if (result.length == 0) {
       res.status(400);
-      res.send("No switch with that name");
+      res.send('No switch with that name');
     } else {
       res.status(200);
       res.send(result);
@@ -69,6 +69,18 @@ module.exports = (server) => {
     next();
   });
 
+  // DELETE /agenda/:jobName
+  // Remove um agendamento futuro
+  server.del('/agenda/:jobName', (req, res, next) => {
+    let {jobName} = req.params;
+    let result = cSwitch.removerAgendamento(jobName);
+
+    res.status(200);
+    res.send(result);
+
+    next();
+  })
+
   // POST /switch/:sw_name
   // Obtém estado das portas do switch sw_name
   server.post('/switch/:sw_name', async (req, res, next) => {
@@ -76,11 +88,11 @@ module.exports = (server) => {
     let {sw_ports, closeTime, openTime} = req.body;
     let result;
 
-    if (closeTime == "now" || openTime == "now") {
+    if (closeTime == 'now' || openTime == 'now') {
       // Fechar a porta imediatamente, sem agendar reabertura
       if (sw_ports.length == 1) {
         let sw_port = Number(sw_ports[0]);
-        if (closeTime == "now") {
+        if (closeTime == 'now') {
           result = await cSwitch.setPortaDoSwitch(sw_name, sw_port, 2);
         } else {
           result = await cSwitch.setPortaDoSwitch(sw_name, sw_port, 1);
@@ -88,22 +100,23 @@ module.exports = (server) => {
 
         if (result == null) {
           res.status(500);
-          res.send("Algo de errado aconteceu");
+          res.send('Algo de errado aconteceu');
         } else {
           res.status(200);
           res.send(result);
         }
       } else {
         res.status(400);
-        res.send("Não é possível acionar imediatamente mais de uma porta");
+        res.send('Não é possível acionar imediatamente mais de uma porta');
       }
     } else {
       console.log(sw_ports);
       if (closeTime) {
-        console.log("Veio closeTime:");
+        console.log('Veio closeTime:');
         console.log(closeTime);
         // Agendar fechamento
-        let res_fechamento = await cSwitch.setAgendamentoFechar(sw_name, sw_ports, closeTime);
+        let res_fechamento =
+            await cSwitch.setAgendamentoFechar(sw_name, sw_ports, closeTime);
         // if (res_fechamento == null) {
         //   res.status(400);
         //   res.send("Fechamento precede horário atual");
@@ -111,10 +124,11 @@ module.exports = (server) => {
       }
 
       if (openTime) {
-        console.log("Veio openTime:");
+        console.log('Veio openTime:');
         console.log(openTime);
         // Agendar abertura
-        let res_abertura = await cSwitch.setAgendamentoAbrir(sw_name, sw_ports, openTime);
+        let res_abertura =
+            await cSwitch.setAgendamentoAbrir(sw_name, sw_ports, openTime);
         // if (res_abertura == null) {
         //   res.status(400);
         //   res.send("Abertura precede horário atual");
@@ -122,7 +136,7 @@ module.exports = (server) => {
       }
 
       res.status(200);
-      res.send("Agendamentos realizados");
+      res.send('Agendamentos realizados');
     }
 
     next();

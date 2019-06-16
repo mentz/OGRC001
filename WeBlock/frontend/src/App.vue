@@ -7,7 +7,11 @@
   <b-navbar type="dark" variant="secondary" class="d-none d-md-block">
     <b-navbar-nav>
       <b-nav-item class="w-100">
-        <span class="text-light">fioreseNET v0.01</span>
+        <span class="text-light">
+          <h3 style="display: inline; margin-right: 0.2em">
+            <strong>fioreseNET</strong>
+          </h3>v1.0.1
+        </span>
       </b-nav-item>
     </b-navbar-nav>
   </b-navbar>
@@ -58,7 +62,7 @@ export default {
       options: [
         { text: "Início", value: "/" },
         { text: "Configuração Portas", value: "/port-config" },
-        { text: 'Agendamento', value: '/agendamento' },
+        { text: "Agendamento", value: "/agendamento" },
         // { text: "Perfil", value: "perfil" },
         { text: "Sair", value: "logoff" }
       ]
@@ -68,13 +72,15 @@ export default {
   methods: {
     logoff() {
       window.document.close();
-      alert("Sinta-se desconectado :D\nisso faz mais sentido se tivesse login.");
+      alert(
+        "Sinta-se desconectado :D\nisso faz mais sentido se tivesse login."
+      );
     },
 
     mudarPagina() {
       if (this.pagina != "logoff") this.$router.push(this.pagina);
       else this.logoff();
-    },
+    }
   }
 };
 </script>
