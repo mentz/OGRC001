@@ -15,7 +15,7 @@
                   <template v-for="(porta, idy) in item.ports">
                     <div class="m-1" :key="idy">
                       <div
-                        :class="`porta border border-` +((porta.operStatus == 1)?'success':'danger')"
+                        :class="`porta border border-` +((porta.operStatus == 1)?'success':'dark')"
                       >
                         <b-button
                           squared
@@ -27,7 +27,7 @@
                           <font-awesome-icon
                             v-else-if="porta.adminStatus == 2"
                             icon="ethernet"
-                            :style="{ color: 'DarkGrey ' }"
+                            :style="{ color: 'Salmon ' }"
                             style="font-size: 2rem"
                           />
                           <font-awesome-icon
@@ -39,7 +39,7 @@
                           <font-awesome-icon
                             v-else
                             icon="ethernet"
-                            :style="{ color: 'Salmon ' }"
+                            :style="{ color: 'DarkGrey ' }"
                             style="font-size: 2rem"
                           />
                         </b-button>
@@ -71,6 +71,7 @@
 // @ is an alias to /src
 import {Client} from "@/api/rest-client";
 import * as config from "@/config";
+import { events } from "@/main";
 
 export default {
   name: "port-config",
@@ -108,7 +109,7 @@ export default {
 
     updateSala() {
       this.switches = [];
-      Client.get(`/sala/${config.SALA}`).then((resultado) => {
+      Client.get(`/sala/${this.getSwitch.sala}`).then(resultado => {
         let switches = resultado.data;
         for (let sw of switches) {
           let portas = [];
@@ -136,6 +137,15 @@ export default {
 
   created() {
     this.updateSala();
+    events.$on("PortConfig-updateSala", () => {
+      this.updateSala();
+    });
+  },
+
+  computed: {
+    getSwitch: function() {
+      return this.$parent.sala[this.$parent.idxSala];
+    }
   }
 };
 </script>

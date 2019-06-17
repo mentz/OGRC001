@@ -96,6 +96,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import { Client } from "@/api/rest-client";
 import * as config from "@/config";
+import { events } from "@/main";
 
 export default {
   name: "agendamento",
@@ -151,6 +152,37 @@ export default {
       porta.marcado = !porta.marcado;
     },
 
+    refresh() {
+      this.switches = [];
+      Client.get(`/sala/${this.getSwitch.sala}`).then(resultado => {
+        let switches = resultado.data;
+        for (let sw of switches) {
+          let portas = [];
+          for (let i = 0; i < sw.port_quantity; i++) {
+            portas.push({
+              number: i + 1,
+              disabled: sw.dont_block.includes(String(i + 1)),
+              marcado: false
+            });
+          }
+          this.switches.push({
+            name: sw.name,
+            ports: portas
+          });
+          // Client.get(`/switch/${sw.name}`).then(res2 => {
+          //   let status = res2.data;
+          //   for (let porta of status) {
+          //     portas.push({
+          //       number: porta.portNumber,
+          //       disabled: sw.dont_block.includes(String(porta.portNumber)),
+          //       marcado: false
+          //     });
+          //   }
+          // });
+        }
+      });
+    },
+
     agendar() {
       this.loading = true;
 
@@ -192,33 +224,16 @@ export default {
   },
 
   created() {
-    Client.get(`/sala/${config.SALA}`).then(resultado => {
-      let switches = resultado.data;
-      for (let sw of switches) {
-        let portas = [];
-        for (let i = 0; i < sw.port_quantity; i++) {
-          portas.push({
-            number: i + 1,
-            disabled: sw.dont_block.includes(String(i + 1)),
-            marcado: false
-          });
-        }
-        this.switches.push({
-          name: sw.name,
-          ports: portas
-        });
-        // Client.get(`/switch/${sw.name}`).then(res2 => {
-        //   let status = res2.data;
-        //   for (let porta of status) {
-        //     portas.push({
-        //       number: porta.portNumber,
-        //       disabled: sw.dont_block.includes(String(porta.portNumber)),
-        //       marcado: false
-        //     });
-        //   }
-        // });
-      }
+    this.refresh();
+    events.$on("Agendamento-refresh", () => {
+      this.refresh();
     });
+  },
+
+  computed: {
+    getSwitch: function() {
+      return this.$parent.sala[this.$parent.idxSala];
+    }
   }
 };
 </script>

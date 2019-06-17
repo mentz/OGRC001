@@ -8,7 +8,7 @@ var snmp = require('net-snmp');
 function getPortStatus(sw, port) {
   let options = {port: Number(sw.port) | 161};
   console.log(options);
-  let session = snmp.createSession(sw.ip, sw.community);
+  let session = snmp.createSession(sw.ip, sw.get_community);
   let oids = [
     `1.3.6.1.2.1.2.2.1.7.${port + Number(sw.initial_port)}`,
     `1.3.6.1.2.1.2.2.1.8.${port + Number(sw.initial_port)}`
@@ -34,7 +34,7 @@ function getPortStatus(sw, port) {
  */
 function setPortStatus(sw, port, status) {
   let options = {port: sw.port | 161};
-  let session = snmp.createSession(sw.ip, sw.community);
+  let session = snmp.createSession(sw.ip, sw.set_community);
   let varbind = [{
     oid: `1.3.6.1.2.1.2.2.1.7.${port + Number(sw.initial_port)}`,
     type: snmp.ObjectType.Integer32,

@@ -2,26 +2,40 @@
   {
     "name": "fioreses",
     "ip": "10.90.90.90",
-    "community": "private",
+    "get_community": "public",
+    "set_community": "private",
     "initial_port": "1",
-    "dont_block": ["1", "2"],
+    "dont_block": [
+      "1"
+    ],
     "port_quantity": "24"
   },
   {
     "name": "leo",
     "ip": "192.168.0.1",
-    "community": "servidorgamer",
+    "get_community": "servidorgamer",
+    "set_community": "servidorgamer",
     "initial_port": "49153",
-    "dont_block": ["1", "2", "4", "21", "22", "24"],
+    "dont_block": [
+      "1",
+      "2",
+      "4",
+      "21",
+      "22",
+      "24"
+    ],
     "port_quantity": "24"
   },
   {
     "name": "virtual",
     "ip": "127.0.0.1",
     "port": "16100",
-    "community": "cisco_16_switch",
+    "get_community": "cisco_16_switch",
+    "set_community": "cisco_16_switch",
     "initial_port": "11001",
-    "dont_block": ["1"],
+    "dont_block": [
+      "1"
+    ],
     "port_quantity": "4"
   }
 ]

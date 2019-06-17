@@ -24,3 +24,4 @@ Vue.component('flat-pickr', flatPickr);
 Vue.config.productionTip = false;
 
 new Vue({router, store, render: h => h(App)}).$mount('#app');
+export const events = new Vue({});

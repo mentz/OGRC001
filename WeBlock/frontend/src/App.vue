@@ -9,9 +9,21 @@
       <b-nav-item class="w-100">
         <span class="text-light">
           <h3 style="display: inline; margin-right: 0.2em">
-            <strong>fioreseNET</strong>
+            <strong>weblock</strong>
           </h3>v1.0.1
         </span>
+      </b-nav-item>
+
+      <b-nav-item class="w-100">
+        <div>
+          <b-dropdown id="dropdown-offset" offset="25" :text="label" class="m-2">
+            <b-dropdown-item
+              v-for="(item, idx) in sala"
+              href="#"
+              @click="mudarSala(idx)"
+            >{{item.sala}}</b-dropdown-item>
+          </b-dropdown>
+        </div>
       </b-nav-item>
     </b-navbar-nav>
   </b-navbar>
@@ -40,7 +52,10 @@
             <b-col md="8" lg="9">
               <b-card-body>
                 <b-card-text>
-                  <router-view/>
+                  <router-view v-if="idxSala != -1"/>
+                  <b-card v-else bg-variant="warning" text-variant="white" class="text-center">
+                    <b-card-text>Selecione uma sala!</b-card-text>
+                  </b-card>
                 </b-card-text>
               </b-card-body>
             </b-col>
@@ -53,11 +68,20 @@
 </div>
 </template>
 
+
+
 <script>
+import { Client } from "@/api/rest-client";
+import * as config from "@/config";
+import { events } from "@/main";
+
 export default {
   data() {
     return {
+      label: "selecione a sala",
       pagina: "home",
+      idxSala: -1,
+      sala: [],
       login: false,
       options: [
         { text: "Início", value: "/" },
@@ -80,7 +104,26 @@ export default {
     mudarPagina() {
       if (this.pagina != "logoff") this.$router.push(this.pagina);
       else this.logoff();
+    },
+
+    mudarSala(idx) {
+      this.label = this.sala[idx].sala;
+      this.idxSala = idx;
+      events.$emit("Home-getAgendamentos");
+      events.$emit("Agendamento-refresh");
+      events.$emit("PortConfig-updateSala");
     }
+  },
+
+  created() {
+    console.log("criado!");
+    Client.get(`sala`)
+      .then(response => {
+        this.sala = response.data;
+      })
+      .catch(err => {
+        this.flashMessage.error({ title: "Erro", message: "Erro interno" });
+      });
   }
 };
 </script>

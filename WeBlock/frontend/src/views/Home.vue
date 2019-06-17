@@ -23,9 +23,11 @@
 <script>
 import { Client } from "@/api/rest-client";
 import * as config from "@/config";
+import { events } from "@/main";
 
 export default {
   name: "home",
+  idx: -1,
   components: {
     // HelloWorld
   },
@@ -42,7 +44,7 @@ export default {
   methods: {
     getAgendamentos() {
       this.agendamentos = [];
-      Client.get(`/agenda/${config.SALA}`)
+      Client.get(`/agenda/${this.getSwitch.sala}`)
         .then(resultado => {
           this.agendamentos = resultado.data;
         })
@@ -50,6 +52,7 @@ export default {
           console.error(err);
         });
     },
+
     removerAgendamento(jobName) {
       if (confirm(`Deseja remover o agendamento:\n"${jobName}" ?`)) {
         Client.delete(`/agenda/${jobName}`)
@@ -74,6 +77,16 @@ export default {
 
   created() {
     this.getAgendamentos();
+    events.$on("Home-getAgendamentos", () => {
+      console.log("alo");
+      this.getAgendamentos();
+    });
+  },
+
+  computed: {
+    getSwitch: function() {
+      return this.$parent.sala[this.$parent.idxSala];
+    }
   }
 };
 </script>

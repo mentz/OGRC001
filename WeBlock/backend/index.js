@@ -16,9 +16,8 @@ server.pre(cors.actual);
 server.use(restify.plugins.bodyParser());
 
 // Proteção de rotas
-// server.use(rjwt({secret: config.JWT_SECRET}).unless({
-//   path: ['/login', '/sala']
-// }));
+// server.use(
+//     rjwt({secret: config.JWT_SECRET}).unless({path: ['/login', '/sala']}));
 
 server.listen(config.PORT);
 require('./routes/all')(server);
