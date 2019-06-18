@@ -144,6 +144,10 @@ export default {
         enableTime: true,
         time_24hr: true
       };
+    },
+
+    getSwitch: function() {
+      return this.$parent.sala[this.$parent.idxSala];
     }
   },
 
@@ -228,12 +232,6 @@ export default {
     events.$on("Agendamento-refresh", () => {
       this.refresh();
     });
-  },
-
-  computed: {
-    getSwitch: function() {
-      return this.$parent.sala[this.$parent.idxSala];
-    }
   }
 };
 </script>

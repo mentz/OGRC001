@@ -1,18 +1,18 @@
 [
   {
-    "sala": "f301",
+    "sala": "F301",
     "switches": [
       "fioreses"
     ]
   },
   {
-    "sala": "teste",
+    "sala": "F302",
     "switches": [
       "leo"
     ]
   },
   {
-    "sala": "lucashouse",
+    "sala": "404A",
     "switches": [
       "virtual"
     ]

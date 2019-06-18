@@ -78,6 +78,10 @@ async function setPortaDoSwitch(sw_name, sw_port, status) {
 function setAgendamentoAbrir(sw_name, sw_ports, datahora) {
   let timeleft = new Date(datahora) - new Date();
   if (timeleft > 0) {
+    console.log(
+        `Religar portas ${sw_ports.toString()} do switch ${sw_name} em ${
+            new Date(datahora).toLocaleString(
+                'pt-BR', {timeZone: 'America/Sao_Paulo'})}.`);
     scheduler.scheduleJob(
         `Religar portas ${sw_ports.toString()} do switch ${sw_name} em ${
             new Date(datahora).toLocaleString(
@@ -104,6 +108,10 @@ function setAgendamentoAbrir(sw_name, sw_ports, datahora) {
 async function setAgendamentoFechar(sw_name, sw_ports, datahora) {
   let timeleft = new Date(datahora) - new Date();
   if (timeleft > 0) {
+    console.log(
+        `Desligar portas ${sw_ports.toString()} do switch ${sw_name} em ${
+            new Date(datahora).toLocaleString(
+                'pt-BR', {timeZone: 'America/Sao_Paulo'})}.`);
     scheduler.scheduleJob(
         `Desligar portas ${sw_ports.toString()} do switch ${sw_name} em ${
             new Date(datahora).toLocaleString(

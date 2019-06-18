@@ -44,6 +44,7 @@ export default {
   methods: {
     getAgendamentos() {
       this.agendamentos = [];
+      console.log(this.getSwitch.sala);
       Client.get(`/agenda/${this.getSwitch.sala}`)
         .then(resultado => {
           this.agendamentos = resultado.data;

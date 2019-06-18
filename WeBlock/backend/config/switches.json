@@ -6,6 +6,7 @@
     "set_community": "private",
     "initial_port": "1",
     "dont_block": [
+      "5",
       "1"
     ],
     "port_quantity": "24"
